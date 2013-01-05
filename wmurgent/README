@@ -1,0 +1,16 @@
+All the source codes are published under GPL
+
+Youjie Zhou <youjiezhou@gmail.com>
+
+To compile wmurgent, you have to install the X11 library. In some distributions,
+you may need to install libX11-dev package.
+
+After `make`, you will get the execute file: wmurgent. Copy it to any folder
+listed in your PATH.
+
+To integrate irssi-dwm.pl with your irssi:
+`cp irssi-dwm.pl ~/.irssi/scripts/`
+`mkdir ~/.irssi/scripts/autorun/`
+`ln -s ~/.irssi/scripts/irssi-dwm.pl ~/.irssi/scripts/autorun/`
+
+Then start irssi with `irssi.sh`
