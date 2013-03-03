@@ -11,8 +11,9 @@ static const char selbgcolor[]      = "#005577";
 static const char selfgcolor[]      = "#ffffff";
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
-static const Bool showbar           = True;     /* False means no bar */
-static const Bool topbar            = False;     /* False means bottom bar */
+static const Bool  showbar          = True;     /* False means no bar */
+static const Bool  topbar           = False;     /* False means bottom bar */
+static const float baropa           = 0.75;
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -101,7 +102,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ControlMask,           XK_Escape, quit,           {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_Escape, quit,           {0} },
         // dwmZ
         { MODKEY|Mod1Mask,              XK_j,      windown,        {0} },
         { MODKEY|Mod1Mask,              XK_k,      winup,          {0} },

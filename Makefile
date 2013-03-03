@@ -57,4 +57,10 @@ uninstall:
 	@echo removing manual page from ${DESTDIR}${MANPREFIX}/man1
 	@rm -f ${DESTDIR}${MANPREFIX}/man1/dwm.1
 
+genlog:
+	git log --format=format:"[%s] %ci %an <%ae>%n%b" > Changelog
+
+pack: genlog
+	tar czf dwmZ-${VERSION}.tgz Changelog Makefile config.h config.mk dwm.c wmurgent/Makefile wmurgent/wmurgent.c
+
 .PHONY: all options clean dist install uninstall

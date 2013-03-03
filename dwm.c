@@ -61,7 +61,7 @@ enum { CurNormal, CurResize, CurMove, CurLast };        /* cursor */
 enum { ColBorder, ColFG, ColBG, ColLast };              /* color */
 enum { NetSupported, NetWMName, NetWMState,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
-       NetWMWindowTypeDialog, NetLast };     /* EWMH atoms */
+       NetWMWindowTypeDialog, NetWMWindowsOpacity, NetLast };     /* EWMH atoms */
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast };             /* clicks */
@@ -528,6 +528,7 @@ cleanupmon(Monitor *mon) {
 		for(m = mons; m && m->next != mon; m = m->next);
 		m->next = mon->next;
 	}
+        XDeleteProperty(dpy, mon->barwin, netatom[NetWMWindowsOpacity]);
 	XUnmapWindow(dpy, mon->barwin);
 	XDestroyWindow(dpy, mon->barwin);
 	free(mon);
@@ -790,9 +791,11 @@ drawbar(Monitor *m) {
 	if((dc.w = dc.x - x) > bh) {
 		dc.x = x;
 		if(m->sel) {
-			col = m == selmon ? dc.sel : dc.norm;
+            dc.sel[ColBG] = getcolor(normbgcolor);
+            col = m == selmon ? dc.sel : dc.norm;
 			drawtext(m->sel->name, col, False);
 			drawsquare(m->sel->isfixed, m->sel->isfloating, False, col);
+            dc.sel[ColBG] = getcolor(selbgcolor);
 		}
 		else
 			drawtext(NULL, dc.norm, False);
@@ -1625,6 +1628,7 @@ setup(void) {
 	netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	netatom[NetWMWindowTypeDialog] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
+        netatom[NetWMWindowsOpacity] = XInternAtom(dpy, "_NET_WM_WINDOW_OPACITY", False);
 	/* init cursors */
 	cursor[CurNormal] = XCreateFontCursor(dpy, XC_left_ptr);
 	cursor[CurResize] = XCreateFontCursor(dpy, XC_sizing);
@@ -1864,6 +1868,10 @@ updatebars(void) {
 		                          CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
 		XDefineCursor(dpy, m->barwin, cursor[CurNormal]);
 		XMapRaised(dpy, m->barwin);
+
+                unsigned int opacity = (unsigned int) (baropa * 0xffffffff);
+                XChangeProperty(dpy, m->barwin, netatom[NetWMWindowsOpacity], XA_CARDINAL, 32,
+                                PropModeReplace, (unsigned char*)&opacity, 1);
 	}
 }
 
@@ -2038,7 +2046,7 @@ updatetitle(Client *c) {
 void
 updatestatus(void) {
 	if(!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
-		strcpy(stext, "dwm-"VERSION);
+		strcpy(stext, "dwmZ-"VERSION);
 	drawbar(selmon);
 }
 
