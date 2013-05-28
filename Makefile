@@ -1,12 +1,9 @@
-# dwm - dynamic window manager
-# See LICENSE file for copyright and license details.
-
 include config.mk
 
-SRC = dwm.c
+SRC = zwm.c
 OBJ = ${SRC:.c=.o}
 
-all: options dwm
+all: options zwm
 
 options:
 	@echo dwm build options:
@@ -20,47 +17,23 @@ options:
 
 ${OBJ}: config.h config.mk
 
-config.h:
-	@echo creating $@ from config.def.h
-	@cp config.def.h $@
-
-dwm: ${OBJ}
+zwm: ${OBJ}
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
 
 clean:
 	@echo cleaning
-	@rm -f dwm ${OBJ} dwm-${VERSION}.tar.gz
+	@rm -f zwm ${OBJ} zwm-${VERSION}.tar.gz
 
-dist: clean
+dist: clean log
 	@echo creating dist tarball
-	@mkdir -p dwm-${VERSION}
-	@cp -R LICENSE Makefile README config.def.h config.mk \
-		dwm.1 ${SRC} dwm-${VERSION}
-	@tar -cf dwm-${VERSION}.tar dwm-${VERSION}
-	@gzip dwm-${VERSION}.tar
-	@rm -rf dwm-${VERSION}
+	@mkdir -p zwm-${VERSION}
+	@cp -R Makefile config.mk config.h changelog \
+		${SRC} zwm-${VERSION}
+	@tar czf zwm-${VERSION}.tar.gz zwm-${VERSION}/
+	@rm -rf zwm-${VERSION}
 
-install: all
-	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
-	@mkdir -p ${DESTDIR}${PREFIX}/bin
-	@cp -f dwm ${DESTDIR}${PREFIX}/bin
-	@chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
-	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1
-	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
-	@sed "s/VERSION/${VERSION}/g" < dwm.1 > ${DESTDIR}${MANPREFIX}/man1/dwm.1
-	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/dwm.1
+log:
+	git log --format=format:"[%s] %ci %an <%ae>%n%b" > changelog
 
-uninstall:
-	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
-	@rm -f ${DESTDIR}${PREFIX}/bin/dwm
-	@echo removing manual page from ${DESTDIR}${MANPREFIX}/man1
-	@rm -f ${DESTDIR}${MANPREFIX}/man1/dwm.1
-
-genlog:
-	git log --format=format:"[%s] %ci %an <%ae>%n%b" > Changelog
-
-pack: genlog
-	tar czf dwmZ-${VERSION}.tgz Changelog Makefile config.h config.mk dwm.c wmurgent/Makefile wmurgent/wmurgent.c
-
-.PHONY: all options clean dist install uninstall
+.PHONY: all options clean dist log
