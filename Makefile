@@ -1,39 +1,34 @@
-include config.mk
+VERSION = 1.1.6.0
 
-SRC = zwm.c
-OBJ = ${SRC:.c=.o}
+X11INC = /usr/X11/include
+X11LIB = /usr/X11/lib
 
-all: options zwm
+XINERAMALIBS  = -L${X11LIB} -lXinerama
+XINERAMAFLAGS = -DXINERAMA
 
-options:
-	@echo dwm build options:
-	@echo "CFLAGS   = ${CFLAGS}"
-	@echo "LDFLAGS  = ${LDFLAGS}"
-	@echo "CC       = ${CC}"
+INCS = -I. -I/usr/include -I${X11INC} -I/usr/include/freetype2/
+LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lXft ${XINERAMALIBS}
 
-.c.o:
-	@echo CC $<
-	@${CC} -c ${CFLAGS} $<
+CC = gcc
 
-${OBJ}: config.h config.mk
+CFLAGS  = -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
+LDFLAGS = -s ${LIBS}
 
-zwm: ${OBJ}
-	@echo CC -o $@
-	@${CC} -o $@ ${OBJ} ${LDFLAGS}
+all: zwm
 
 clean:
-	@echo cleaning
-	@rm -f zwm ${OBJ} zwm-${VERSION}.tar.gz
+	@rm -f zwm
+
+zwm: zwm.c
+	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ ${LIBS}
+
+log:
+	@git log --format=format:"%ci %an <%ae>%n%s%n%n%b" > changelog
 
 dist: clean log
 	@echo creating dist tarball
 	@mkdir -p zwm-${VERSION}
-	@cp -R Makefile config.mk config.h changelog \
-		${SRC} zwm-${VERSION}
+	@cp -R Makefile config.h zwm.c changelog \
+		zwm-${VERSION}
 	@tar czf zwm-${VERSION}.tar.gz zwm-${VERSION}/
 	@rm -rf zwm-${VERSION}
-
-log:
-	git log --format=format:"[%s] %ci %an <%ae>%n%b" > changelog
-
-.PHONY: all options clean dist log
