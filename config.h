@@ -63,7 +63,7 @@ static const Layout layouts[] =
 static const char *dmenucmd[] = { "dmenu_run", "-fn", menufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "xterm", NULL };
 static const char *wwwcmd[]   = { "google-chrome", NULL };
-static const char *fmcmd[]    = { "xfe", NULL };
+static const char *xdcmd[]    = { "skippy-xd", "1>/dev/null 2>/dev/null", NULL };
 static const char *lockcmd[]  = { "xscreensaver-command", "-lock", NULL };
 //---------------------------------------------------------------------------
 static Key keys[] =
@@ -72,7 +72,7 @@ static Key keys[] =
     { MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
     { MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
     { MODKEY,                       XK_w,      spawn,          {.v = wwwcmd } },
-    { MODKEY,                       XK_e,      spawn,          {.v = fmcmd } },
+    { MODKEY,                       XK_grave,  spawn,          {.v = xdcmd } },
     { MODKEY|ShiftMask,             XK_l,      spawn,          {.v = lockcmd } },
     { MODKEY,                       XK_b,      togglebar,      {0} },
     { MODKEY,                       XK_j,      focusstack,     {.i = +1 } },

@@ -11,7 +11,7 @@ LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lXft ${XINERAMALIBS}
 
 CC = gcc
 
-CFLAGS  = -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
+CFLAGS  = -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS} ${INCS}
 LDFLAGS = -s ${LIBS}
 
 all: zwm
