@@ -1,11 +1,18 @@
 VERSION = 0.1
 
-include ./config.mk
+CC	= gcc
+CXX	= g++
 
-INCS = -I. -I/usr/include -I${X11INC} -I/usr/include/freetype2/
-LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lXft ${XINERAMALIBS}
+X11INC = /usr/X11/include
+X11LIB = /usr/X11/lib64
 
-CFLAGS  = -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS} ${INCS}
+XINERAMALIBS  = -L${X11LIB} -lXinerama
+XINERAMAFLAGS = -DXINERAMA
+
+INCS = -I. -I/usr/include -I${X11INC}
+LIBS = -L/usr/lib64 -L${X11LIB} -lX11 -lXft ${XINERAMALIBS}
+
+CFLAGS  = -std=c99 -pedantic -Wall -Wno-deprecated-declarations -Os -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS} ${INCS}
 LDFLAGS = -s ${LIBS}
 
 all: zwm

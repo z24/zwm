@@ -1,12 +1,12 @@
-# About #
+# about #
 
-zwm is another dwm-based Window Manager. This WM is 100% customized to
-my own habits. As I'm not a weird guy, so you may agree with those new
-features as well. Detailed usage can be found in 'changelog'.
+zwm is another dwm-based window manager but it may also try to become
+a useful X desktop environment for development.
 
-# Features #
+# features #
+- move window around in float mode using keyboard as in the evilwm
 
-- move window (float mode) around using keyboard as in evilwm
-- transparent status bar by default
+# from upstream #
+- fix SDL program fullscreen bug
 - xft font support
 - each tag has its own window layout

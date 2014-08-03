@@ -1,9 +1,8 @@
-//---------------------------------------------------------------------------
 #ifndef configH
 #define configH
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 #pragma pack(push,1)
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 /* appearance */
 static const char font[]            = "WenQuanYi Zen Hei Mono:size=10";
 static const char menufont[]        = "-*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*";
@@ -17,12 +16,11 @@ static const unsigned int borderpx  = 1;     /* border pixel of windows */
 static const unsigned int snap      = 32;    /* snap pixel */
 static const Bool  showbar          = True;  /* False means no bar */
 static const Bool  topbar           = False; /* False means bottom bar */
-static const float baropa           = 0.75;
-static const int movedist           = 16; /* number of pixels when we move the window */
-//---------------------------------------------------------------------------
+static const int movedist           = 16;    /* number of pixels when we move the window */
+//------------------------------------------------------------------------------
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static const Rule rules[] =
 {
     /* class      instance    title       tags mask     isfloating   monitor */
@@ -35,12 +33,12 @@ static const Rule rules[] =
     { "Gimp",       NULL,       NULL,       0,            True,        -1 },
     { "Sylpheed",   NULL,       NULL,       0,            True,        -1 }
 };
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 /* layout(s) */
 static const float mfact      = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster      = 1;    /* number of clients in master area */
 static const Bool resizehints = False; /* True means respect size hints in tiled resizals */
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static const Layout layouts[] =
 {
     /* symbol     arrange function */
@@ -48,7 +46,7 @@ static const Layout layouts[] =
     { "><>",      NULL },       /* no layout function means floating behavior */
     { "[M]",      monocle },
 };
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG)                                                          \
@@ -58,14 +56,14 @@ static const Layout layouts[] =
     { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", menufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "xterm", NULL };
-static const char *wwwcmd[]   = { "google-chrome", NULL };
-static const char *xdcmd[]    = { "skippy-xd", "1>/dev/null 2>/dev/null", NULL };
+static const char *wwwcmd[]   = { "google-chrome", "2>&1 > /dev/null", NULL };
+static const char *xdcmd[]    = { "skippy-xd", "2>&1 > /dev/null", NULL };
 static const char *lockcmd[]  = { "xscreensaver-command", "-lock", NULL };
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static Key keys[] =
 {
     /* modifier                     key        function        argument */
@@ -87,14 +85,21 @@ static Key keys[] =
     { MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
     { MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
     { MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-    /* { MODKEY,                       XK_space,  setlayout,      {0} }, */
-    /* { MODKEY|ShiftMask,             XK_space,  togglefloating, {0} }, */
     { MODKEY,                       XK_0,      view,           {.ui = ~0 } },
     { MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
     { MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
     { MODKEY,                       XK_period, focusmon,       {.i = +1 } },
     { MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
     { MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+    /* move window around in float mode */
+    { MODKEY|Mod1Mask,              XK_j,      windown,        {0} },
+    { MODKEY|Mod1Mask,              XK_k,      winup,          {0} },
+    { MODKEY|Mod1Mask,              XK_h,      winleft,        {0} },
+    { MODKEY|Mod1Mask,              XK_l,      winright,       {0} },
+    { MODKEY|Mod1Mask,              XK_y,      wintl,          {0} },
+    { MODKEY|Mod1Mask,              XK_u,      wintr,          {0} },
+    { MODKEY|Mod1Mask,              XK_b,      winbl,          {0} },
+    { MODKEY|Mod1Mask,              XK_n,      winbr,          {0} },
     TAGKEYS(                        XK_1,                      0)
     TAGKEYS(                        XK_2,                      1)
     TAGKEYS(                        XK_3,                      2)
@@ -104,19 +109,9 @@ static Key keys[] =
     TAGKEYS(                        XK_7,                      6)
     TAGKEYS(                        XK_8,                      7)
     TAGKEYS(                        XK_9,                      8)
-    { MODKEY|ControlMask|ShiftMask, XK_Escape, quit,           {0} },
-
-    { MODKEY|Mod1Mask,              XK_j,      windown,        {0} },
-    { MODKEY|Mod1Mask,              XK_k,      winup,          {0} },
-    { MODKEY|Mod1Mask,              XK_h,      winleft,        {0} },
-    { MODKEY|Mod1Mask,              XK_l,      winright,       {0} },
-
-    { MODKEY|Mod1Mask,              XK_y,      wintl,          {0} },
-    { MODKEY|Mod1Mask,              XK_u,      wintr,          {0} },
-    { MODKEY|Mod1Mask,              XK_b,      winbl,          {0} },
-    { MODKEY|Mod1Mask,              XK_n,      winbr,          {0} }
+    { MODKEY|ControlMask|ShiftMask, XK_Escape, quit,           {0} }
 };
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 /* button definitions */
 /* click can be ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] =
@@ -134,7 +129,7 @@ static Button buttons[] =
     { ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
     { ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} }
 };
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 #pragma pack(pop)
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 #endif // configH
