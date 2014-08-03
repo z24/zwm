@@ -60,8 +60,8 @@ static const Layout layouts[] =
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", menufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "xterm", NULL };
-static const char *wwwcmd[]   = { "google-chrome", "2>&1 > /dev/null", NULL };
-static const char *xdcmd[]    = { "skippy-xd", "2>&1 > /dev/null", NULL };
+static const char *wwwcmd[]   = { "google-chrome", NULL };
+static const char *xdcmd[]    = { "skippy-xd", NULL };
 static const char *lockcmd[]  = { "xscreensaver-command", "-lock", NULL };
 //------------------------------------------------------------------------------
 static Key keys[] =
